@@ -37,7 +37,7 @@ class AdminController extends AbstractAdminBundleController
      * List all available class content ordered by category
      *
      */
-    public function indexAction()
+    public function indexAction($reload = false)
     {
         $classContents = $this->getClassContents();
         $userBookMarks = $this->getEntityManager()
@@ -49,7 +49,8 @@ class AdminController extends AbstractAdminBundleController
 
         return $this->render('Admin/Index.twig', [
             'classContents' => $classContents,
-            'bookMarks' => $userBookMarks
+            'bookMarks' => $userBookMarks,
+            'reload' => $reload
         ]);
     }
 
@@ -75,7 +76,7 @@ class AdminController extends AbstractAdminBundleController
 
         $this->notifyUser(self::NOTIFY_SUCCESS, 'Your favorites are successfuly saved.');
 
-        return $this->indexAction();
+        return $this->indexAction(true);
     }
 
     /**

@@ -40,6 +40,8 @@
     <input type="submit" class="btn btn-primary pull-right" value="Mettre à jour les préférences" />
 </form>
 
+{% if reload == true %}<script type="text/javascript">location.reload();</script>{% endif %}
+
 <style>
     #favorite-bundle input[type='checkbox'] {
         width:20px;
