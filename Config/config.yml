@@ -6,5 +6,5 @@ bundle:
     enable: true
     config_per_site: false
     admin_controller:
-        admin: Lpdigital\Bundle\FavoriteBundle\Controller\AdminController
+        admin: LpDigital\Bundle\FavoriteBundle\Controller\AdminController
     admin_entry_point: admin.index

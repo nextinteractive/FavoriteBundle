@@ -19,7 +19,7 @@
  * along with FavoriteBundle. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Lpdigital\Bundle\FavoriteBundle\Listener;
+namespace LpDigital\Bundle\FavoriteBundle\Listener;
 
 use BackBee\Event\Event;
 

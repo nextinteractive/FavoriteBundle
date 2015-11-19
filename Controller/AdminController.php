@@ -19,11 +19,11 @@
  * along with FavoriteBundle. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Lpdigital\Bundle\FavoriteBundle\Controller;
+namespace LpDigital\Bundle\FavoriteBundle\Controller;
 
 use BackBee\Bundle\AbstractAdminBundleController;
 use BackBee\ClassContent\AbstractClassContent;
-use BackBee\Bundle\FavoriteBundle\Entity\BookMark;
+use LpDigital\Bundle\FavoriteBundle\Entity\BookMark;
 
 /**
  * @author      Mickaël Andrieu <mickael.andrieu@lp-digital.fr>

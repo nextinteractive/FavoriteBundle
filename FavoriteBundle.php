@@ -19,7 +19,7 @@
  * along with FavoriteBundle. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Lpdigital\Bundle\FavoriteBundle;
+namespace LpDigital\Bundle\FavoriteBundle;
 
 use BackBee\Bundle\AbstractBundle;
 

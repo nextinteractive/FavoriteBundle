@@ -19,7 +19,7 @@
  * along with FavoriteBundle. If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Lpdigital\Bundle\FavoriteBundle\Entity;
+namespace LpDigital\Bundle\FavoriteBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
