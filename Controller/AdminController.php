@@ -41,7 +41,7 @@ class AdminController extends AbstractAdminBundleController
     {
         $classContents = $this->getClassContents();
         $userBookMarks = $this->getEntityManager()
-            ->getRepository('BackBee\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($this->getUser()->getId());
+            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($this->getUser()->getId());
 
         if (!empty($userBookMarks)) {
             $userBookMarks = $userBookMarks->getBookMarks();
@@ -61,7 +61,7 @@ class AdminController extends AbstractAdminBundleController
     {
         $bookmarkedBlocks = array_keys($this->getRequest()->request->all());
         $userBookMarks = $this->getEntityManager()
-            ->getRepository('BackBee\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($this->getUser()->getId());
+            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($this->getUser()->getId());
 
         if (empty($userBookMarks)) {
             $userBookMarks = new BookMark();

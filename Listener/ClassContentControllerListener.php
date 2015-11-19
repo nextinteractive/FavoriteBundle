@@ -58,7 +58,7 @@ class ClassContentControllerListener
         $categoryContents = [];
 
         $userBookMarks = $entityManager
-            ->getRepository('BackBee\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($user->getId());
+            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($user->getId());
 
         if (!empty($userBookMarks)) {
             $userBookMarks = $userBookMarks->getBookMarks();
