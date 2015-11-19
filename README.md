@@ -6,7 +6,7 @@ Set up the bundle in ``bundles.yml`` file:
 
 ```yaml
 // others bundle
-fav: Lpdigital\Bundle\FavoriteBundle\FavoriteBundle
+fav: LpDigital\Bundle\FavoriteBundle\FavoriteBundle
 ```
 
 Then install the table **user_bookmarks**:
