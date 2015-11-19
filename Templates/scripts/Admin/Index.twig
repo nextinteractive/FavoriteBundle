@@ -1,0 +1,51 @@
+<h1>Block Bookmark manager</h1>
+
+<hr />
+<form {{ this.bundleAdminForm('fav.admin.saveFavorites')|raw }} id="favorite-bundle">
+    <p class="bg-info">Bookmark a block put it in the "Favoris" category.</p>
+    <br />
+    <table class="table table-stripped table-bordered table-responsive table-condensed">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Icon</th>
+            <th>Bookmark</th>
+        </tr>
+
+        {% for className, classContent in classContents %}
+            {% set name = classContent.getProperty('name') %}
+            {%  set checked = className in bookMarks ? 'checked' : '' %}
+            <tr>
+                <td>{{ name }}</td>
+                <td>{{ classContent.getProperty('description') }}</td>
+                <td>
+                    <figure class="bb5-extension-img">
+                        <img style="width:75px;" src="./resources/img/contents/{{ classContent.getImageName() }}">
+                    </figure>
+                </td>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input name="{{ className }}" type="checkbox" {{ checked }} id="{{ className }}" />
+                        </label>
+                    </div>
+                </td>
+            </tr>
+
+        {% endfor %}
+    </table>
+
+    <hr />
+    <p class="bg-info">Bookmark a block put it in the "Favoris" category.</p>
+    <input type="submit" class="btn btn-primary pull-right" value="Mettre à jour les préférences" />
+</form>
+
+<style>
+    #favorite-bundle input[type='checkbox'] {
+        width:20px;
+        height:20px;
+        background:white;
+        border-radius:5px;
+        border:2px solid #555;
+    }
+</style>

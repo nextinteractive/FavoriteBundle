@@ -1,0 +1,3 @@
+rest.controller.classcontentcontroller.getcategorycollectionaction.postcall:
+  listeners:
+    - [Lpdigital\Bundle\FavoriteBundle\Listener\ClassContentControllerListener, onPostCategoryCall]
