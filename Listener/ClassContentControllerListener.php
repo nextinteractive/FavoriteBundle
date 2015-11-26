@@ -37,7 +37,7 @@ class ClassContentControllerListener
         $entityManager = $event->getApplication()->getEntityManager();
         $user = $event->getApplication()->getBBUserToken()->getUser();
 
-        $favoriteCategory = self::getFavoriteCategory($entityManager, $user);
+        $favoriteCategory = self::getFavoriteCategory($entityManager, $user->getId());
 
 
         $categories = json_decode($response->getContent(), true);
@@ -48,7 +48,7 @@ class ClassContentControllerListener
         $response->setContent(json_encode($categories, true));
     }
 
-    private static function getFavoriteCategory($entityManager, $user)
+    protected static function getFavoriteCategory($entityManager, $id)
     {
         $category = [
             'id' => strtolower(self::CATEGORY_FAVORITE),
@@ -58,7 +58,7 @@ class ClassContentControllerListener
         $categoryContents = [];
 
         $userBookMarks = $entityManager
-            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($user->getId());
+            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($id);
 
         if (!empty($userBookMarks)) {
             $userBookMarks = $userBookMarks->getBookMarks();
