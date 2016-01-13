@@ -25,6 +25,7 @@ use BackBee\Event\Event;
 
 /**
  * @author Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
+ * @author Marian Hodis <marian.hodis@lp-digital.fr>
  */
 class ClassContentControllerListener
 {
@@ -38,7 +39,9 @@ class ClassContentControllerListener
         $user = $event->getApplication()->getBBUserToken()->getUser();
 
         $favoriteCategory = self::getFavoriteCategory($entityManager, $user->getId());
-
+        if(empty($favoriteCategory['contents'])) {
+            $favoriteCategory = self::getDefaultFavoriteCategory($entityManager, $event->getApplication()->getSite()->getUid(), $favoriteCategory);
+        }
 
         $categories = json_decode($response->getContent(), true);
 
@@ -54,16 +57,49 @@ class ClassContentControllerListener
             'id' => strtolower(self::CATEGORY_FAVORITE),
             'name' => self::CATEGORY_FAVORITE,
         ];
-
-        $categoryContents = [];
-
+        
         $userBookMarks = $entityManager
             ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneByUserId($id);
 
         if (!empty($userBookMarks)) {
             $userBookMarks = $userBookMarks->getBookMarks();
-            foreach($userBookMarks as $classContentClassName)
-            {
+            $category['contents'] = self::processBookMarks($userBookMarks);
+        }
+        
+        return $category;
+    }
+    
+    /**
+     * If user has no favorite blocks show him the default favorite site blocks
+     * 
+     * @param $entityManager
+     * @param string $siteUid
+     * @param array $category
+     * @return array $category
+     */
+    protected static function getDefaultFavoriteCategory($entityManager, $siteUid, array $category)
+    {
+        $siteBookMarks = $entityManager
+            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findBySiteUid($siteUid);
+        if (!empty($siteBookMarks)) {
+            $category['contents'] = self::processBookMarks($siteBookMarks);
+        }
+        
+        return $category;
+    }
+    
+    /**
+     * Process ClassContent in order to appear in the favorite category
+     * 
+     * @param array $bookMarks
+     * @return array
+     */
+    protected static function processBookMarks(array $bookMarks)
+    {
+        $categoryContents = [];
+        foreach($bookMarks as $bookMark) {
+            if((is_string($classContentClassName = $bookMark) && !empty($classContentClassName)) || 
+                (is_object($bookMark) && (!empty($classContentClassName = $bookMark->getBookMarks()[0])))) {
                 $content = new $classContentClassName;
                 $contentArray = [
                     'visible' => true,
@@ -74,9 +110,8 @@ class ClassContentControllerListener
                 ];
                 $categoryContents[] = $contentArray;
             }
-            $category['contents'] = $categoryContents;
         }
-
-        return $category;
+        
+        return $categoryContents;
     }
 }

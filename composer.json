@@ -4,11 +4,15 @@
   "type": "backbee-bundle",
   "license": "GPL-3.0+",
   "keywords": ["blocks", "favorites", "bookmarks", "admin panel"],
-  "homepage": "https://github.com/Lp-digital/PlayerBundle",
+  "homepage": "https://github.com/Lp-digital/FavoriteBundle",
   "authors": [
     {
       "name": "Mickaël Andrieu",
       "email": "mickael.andrieu@lp-digital.fr"
+    },
+    {
+      "name": "Marian Hodis",
+      "email": "marian.hodis@lp-digital.fr"
     }
   ],
   "require": {

@@ -1,5 +1,7 @@
 <h1>Block Bookmark manager</h1>
-
+<p class="pull-right">
+    <a {{ this.bundleAdminLink("fav.admin.defaultBookMarks")|raw }}>Set default bookmarks</a>
+</p>
 <hr />
 <form {{ this.bundleAdminForm('fav.admin.saveFavorites')|raw }} id="favorite-bundle">
     <p class="bg-info">Bookmark a block put it in the "Favoris" category.</p>
@@ -39,15 +41,7 @@
     <p class="bg-info">Bookmark a block put it in the "Favoris" category.</p>
     <input type="submit" class="btn btn-primary pull-right" value="Valid your favorites blocks" />
 </form>
-
-{% if reload == true %}<script type="text/javascript">location.reload();</script>{% endif %}
-
-<style>
-    #favorite-bundle input[type='checkbox'] {
-        width:20px;
-        height:20px;
-        background:white;
-        border-radius:5px;
-        border:2px solid #555;
-    }
-</style>
+<link rel="stylesheet" href="{{ this.getResourceUrl('css/styles.css') }}">
+{% if reload == true %}
+    <script type="text/javascript" src="{{ this.getResourceUrl('js/reloader.js') }}"></script>
+{% endif %}
