@@ -25,14 +25,16 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @author Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
+ * @author Marian Hodis <marian.hodis@lp-digital.fr>
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="LpDigital\Bundle\FavoriteBundle\Repository\BookMarkRepository")
  * @ORM\Table(name="user_bookmarks")
- * @ORM\HasLifecycleCallbacks
  */
 class BookMark
 {
     /**
+     * Unique identifier
+     * 
      * @var int
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
@@ -42,42 +44,97 @@ class BookMark
 
     /**
      * @var int
-     * @ORM\Column(type="integer", name="user_id")
+     * @ORM\Column(type="integer", name="user_id", nullable=true)
      */
     private $userId;
+    
+    /**
+     * Site id
+     * 
+     * @var array
+     * @ORM\Column(type="simple_array", name="site_id", nullable=true)
+     */
+    private $siteId;
 
     /**
      * @var array
      * @ORM\Column(type="simple_array", name="bookmarks")
      */
     private $bookmarks;
-
+    
+    /**
+     * Get id
+     * 
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
     }
-
+    
+    /**
+     * Get user id
+     * 
+     * @return int
+     */
     public function getUserId()
     {
         return $this->userId;
     }
-
+    
+    /**
+     * Set user id
+     * 
+     * @param int $userId
+     * @return \LpDigital\Bundle\FavoriteBundle\Entity\BookMark
+     */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-
         return $this;
     }
-
+    
+    /**
+     * Site id
+     * 
+     * @return array
+     */
+    public function getSiteId()
+    {
+        return $this->siteId;
+    }
+    
+    /**
+     * Set site id
+     * 
+     * @param array $siteId
+     * @return \LpDigital\Bundle\FavoriteBundle\Entity\DefaultBookMark
+     */
+    public function setSiteId(array $siteId)
+    {
+        $this->siteId = $siteId;
+        return $this;
+    }
+    
+    /**
+     * Get book marks
+     * 
+     * @return array
+     */
     public function getBookMarks()
     {
         return $this->bookmarks;
     }
 
+    /**
+     * Set book marks
+     * 
+     * @param array $bookmarks
+     * @return \LpDigital\Bundle\FavoriteBundle\Entity\BookMark
+     */
     public function setBookMarks(array $bookmarks)
     {
         $this->bookmarks = $bookmarks;
-
         return $this;
     }
 }

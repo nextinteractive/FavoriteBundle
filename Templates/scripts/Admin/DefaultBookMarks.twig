@@ -1,0 +1,27 @@
+<h1>Site Bookmark manager</h1>
+<p class="pull-right">
+    <a {{ this.bundleAdminLink("fav.admin.index")|raw }}>Set bookmarks</a>
+</p>
+<hr />
+<form {{ this.bundleAdminForm('fav.admin.saveDefaultFavorites')|raw }} id="favorite-bundle">
+    <p class="bg-info">Bookmark a block and select the sites to put it in the "Favoris" category.</p>
+    <br />
+    <table class="table table-stripped table-bordered table-responsive table-condensed">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Icon</th>
+            <th>Sites</th>
+        </tr>
+        {% for className, classContent in classContents %}
+            {% include 'Admin/Partials/ClassContentTableRow.twig' with {'bookMarks': bookMarks, 'className': className, 'classContent': classContent, 'sites': sites} %}
+        {% endfor %}
+    </table>
+    <hr />
+    <p class="bg-info">Bookmark a block and select the sites to put it in the "Favoris" category.</p>
+    <input type="submit" class="btn btn-primary pull-right" value="Valid your favorites blocks" />
+</form>
+<link rel="stylesheet" href="{{ this.getResourceUrl('css/styles.css') }}">
+{% if reload == true %}
+    <script type="text/javascript" src="{{ this.getResourceUrl('js/reloader.js') }}"></script>
+{% endif %}

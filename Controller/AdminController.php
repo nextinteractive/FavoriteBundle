@@ -21,21 +21,28 @@
 
 namespace LpDigital\Bundle\FavoriteBundle\Controller;
 
-use BackBee\Bundle\AbstractAdminBundleController;
-use BackBee\ClassContent\AbstractClassContent;
+use BackBee\Bundle\AbstractAdminBundleController,
+    BackBee\ClassContent\AbstractClassContent;
+
 use LpDigital\Bundle\FavoriteBundle\Entity\BookMark;
 
 /**
- * @author      Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
+ * @author Mickaël Andrieu <mickael.andrieu@lp-digital.fr>
+ * @author Marian Hodis <marian.hodis@lp-digital.fr>
  */
 class AdminController extends AbstractAdminBundleController
 {
+    /**
+     * Class content manager
+     * 
+     * @var BackBee\ClassContent\ClassContentManager
+     */
     private $manager;
-
 
     /**
      * List all available class content ordered by category
      *
+     * @param bool $reload
      */
     public function indexAction($reload = false)
     {
@@ -67,16 +74,92 @@ class AdminController extends AbstractAdminBundleController
         if (empty($userBookMarks)) {
             $userBookMarks = new BookMark();
             $userBookMarks->setUserId($this->getUser()->getId());
-
         }
         $userBookMarks->setBookMarks($bookmarkedBlocks);
 
         $this->getEntityManager()->persist($userBookMarks);
         $this->getEntityManager()->flush();
 
-        $this->notifyUser(self::NOTIFY_SUCCESS, 'Your favorites are successfuly saved.');
+        $this->notifyUser(self::NOTIFY_SUCCESS, 'Your favourites are successfuly saved.');
 
         return $this->indexAction(true);
+    }
+    
+    /**
+     * Default bookmarks action
+     * 
+     * @param bool $reload
+     */
+    public function defaultBookMarksAction($reload = false)
+    {
+        $classContents = $this->getClassContents();
+        $sites = $this->getEntityManager()
+            ->getRepository('\BackBee\Site\Site')->findAll();
+        $bookMarks = $this->getEntityManager()
+            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findAll();
+
+        return $this->render('Admin/DefaultBookMarks.twig', [
+            'classContents' => $classContents,
+            'bookMarks' => $bookMarks,
+            'sites' => $sites,
+            'reload' => $reload
+        ]);
+    }
+    
+    /**
+     * Save default favorites action
+     */
+    public function saveDefaultFavoritesAction()
+    {
+        $bookmarkedBlocks = $this->getRequest()->request->all();
+        $bookMarksNotToBeRemoved = array();
+        foreach($bookmarkedBlocks as $classContent => $sites) {
+            $classContent = str_replace("[]","",$classContent);
+            $alreadyBookMarkedBlocks = $this->getEntityManager()
+                ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneDefaultBookMark($classContent);
+            
+            if (empty($alreadyBookMarkedBlocks)) {
+                $alreadyBookMarkedBlocks = new BookMark();
+                $alreadyBookMarkedBlocks->setBookMarks(array($classContent));
+            } 
+            $alreadyBookMarkedBlocks->setSiteId($sites);
+
+            $this->getEntityManager()->persist($alreadyBookMarkedBlocks);
+            $this->getEntityManager()->flush();
+            $bookMarksNotToBeRemoved[] = $alreadyBookMarkedBlocks;
+        }
+        $this->emptyDefaultFavorites($bookMarksNotToBeRemoved);
+        $this->notifyUser(self::NOTIFY_SUCCESS, 'Your default favourites are successfuly saved.');
+
+        return $this->defaultBookMarksAction(true);
+    }
+    
+    /**
+     * Remove all noot bookmarked class contents
+     * 
+     * @param array $bookMarksNotToBeRemoved
+     */
+    private function emptyDefaultFavorites(array $bookMarksNotToBeRemoved) 
+    {
+        $bookMarks = $this->getEntityManager()
+            ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findAllDefaultBookMarks();
+        $diff = array_diff(
+            array_map(function($object) {
+                if(count($object->getBookMarks()) == 1) {
+                    return $object->getBookMarks()[0];
+                }
+            }, $bookMarks),
+            array_map(function($object) {
+                if(count($object->getBookMarks()) == 1) {
+                    return $object->getBookMarks()[0];
+                }
+            }, $bookMarksNotToBeRemoved));
+        foreach($diff as $classContentToBeRemoved) {
+            $toBeRemoved = $this->getEntityManager()
+                ->getRepository('LpDigital\Bundle\FavoriteBundle\Entity\BookMark')->findOneDefaultBookMark($classContentToBeRemoved);
+            $this->getEntityManager()->remove($toBeRemoved);
+            $this->getEntityManager()->flush();
+        }
     }
 
     /**

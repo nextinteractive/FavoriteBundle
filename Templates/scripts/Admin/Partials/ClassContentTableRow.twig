@@ -1,0 +1,24 @@
+{% set name = classContent.getProperty('name') %}
+{% set siteIds = [] %}
+{% for bookMark in bookMarks %}
+    {% if bookMark.getBookMarks|first == className %}
+        {% set siteIds = bookMark.getSiteId %}
+    {% endif %}
+{% endfor %}
+<tr>
+    <td>{{ name }}</td>
+    <td>{{ classContent.getProperty('description') }}</td>
+    <td>
+        <figure class="bb5-extension-img">
+            <img style="width:75px;" src="./resources/img/contents/{{ classContent.getImageName() }}">
+        </figure>
+    </td>
+    <td>
+        <select name="{{ className }}[]" multiple="true">
+            {% for site in sites %}        
+                {% set selected = site.getUid in siteIds ? 'selected' : '' %}
+                <option value="{{ site.getUid }}" {{ selected }}>{{ site.getLabel }}</option>
+            {% endfor %}
+        </select>
+    </td>
+</tr>
