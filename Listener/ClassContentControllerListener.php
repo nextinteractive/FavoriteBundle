@@ -98,8 +98,13 @@ class ClassContentControllerListener
     {
         $categoryContents = [];
         foreach($bookMarks as $bookMark) {
-            if((is_string($classContentClassName = $bookMark) && !empty($classContentClassName)) || 
-                (is_object($bookMark) && (!empty($classContentClassName = $bookMark->getBookMarks()[0])))) {
+            $classContentClassName = null;
+            if (is_string($bookMark)) {
+                $classContentClassName = $bookMark;
+            } elseif (is_object($bookMark)) {
+                $classContentClassName = $bookMark->getBookMarks()[0];
+            }
+            if(!empty($classContentClassName)) {
                 $content = new $classContentClassName;
                 $contentArray = [
                     'visible' => true,
