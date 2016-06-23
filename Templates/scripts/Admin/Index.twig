@@ -1,7 +1,9 @@
 <h1>Block Bookmark manager</h1>
+{% if accessToDefault %}
 <p class="pull-right">
     <a {{ this.bundleAdminLink("fav.admin.defaultBookMarks")|raw }}>Set default bookmarks</a>
 </p>
+{% endif %}
 <hr />
 <form {{ this.bundleAdminForm('fav.admin.saveFavorites')|raw }} id="favorite-bundle">
     <p class="bg-info">Bookmark a block put it in the "Favoris" category.</p>

@@ -24,6 +24,8 @@ namespace LpDigital\Bundle\FavoriteBundle\Controller;
 use BackBee\Bundle\AbstractAdminBundleController,
     BackBee\ClassContent\AbstractClassContent;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
+
 use LpDigital\Bundle\FavoriteBundle\Entity\BookMark;
 
 /**
@@ -38,6 +40,24 @@ class AdminController extends AbstractAdminBundleController
      * @var BackBee\ClassContent\ClassContentManager
      */
     private $manager;
+    
+    /**
+     * Access to default bookmarks
+     * 
+     * @var bool
+     */
+    private $accessToDefault = false;
+
+    public function __construct(\BackBee\BBApplication $app)
+    {
+        parent::__construct($app);
+
+        try {
+            $this->accessToDefault = $this->isGranted('EDIT', $this->bundle);
+        } catch (AuthenticationCredentialsNotFoundException $e) {
+
+        }
+    }
 
     /**
      * List all available class content ordered by category
@@ -57,6 +77,7 @@ class AdminController extends AbstractAdminBundleController
         return $this->render('Admin/Index.twig', [
             'classContents' => $classContents,
             'bookMarks' => $userBookMarks,
+            'accessToDefault' => $this->accessToDefault,
             'reload' => $reload
         ]);
     }
@@ -92,6 +113,11 @@ class AdminController extends AbstractAdminBundleController
      */
     public function defaultBookMarksAction($reload = false)
     {
+        if (!$this->accessToDefault) {
+            $this->notifyUser(self::NOTIFY_ERROR, 'Permission denied!');
+            return $this->render('Admin/BackToIndex.twig');
+        }
+
         $classContents = $this->getClassContents();
         $sites = $this->getEntityManager()
             ->getRepository('\BackBee\Site\Site')->findAll();
