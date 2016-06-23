@@ -1,3 +1,7 @@
 rest.controller.classcontentcontroller.getcategorycollectionaction.postcall:
   listeners:
     - [LpDigital\Bundle\FavoriteBundle\Listener\ClassContentControllerListener, onPostCategoryCall]
+
+nestednode.page.render:
+  listeners:
+    - [LpDigital\Bundle\FavoriteBundle\Listener\PageListener, onPageRender]
